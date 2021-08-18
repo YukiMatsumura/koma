@@ -3,7 +3,7 @@ package jp.yuki312.koma.aggregate
 import jp.yuki312.koma.aggregate.AggregateResult.AggregateDurations
 import jp.yuki312.koma.track.TrackResult
 
-class AggregateFunction {
+internal class AggregateFunction {
 
   fun execute(trackResult: TrackResult): AggregateResult {
     val config = trackResult.config
