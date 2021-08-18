@@ -35,6 +35,7 @@ class PercentileValidationTest {
     assertThat(result.validatedList[0].value).isEqualTo(9)
     assertThat(result.validatedList[0].threshold).isEqualTo(10)
     assertThat(result.validatedList[0].isPassed).isEqualTo(true)
+    assertThat(result.isPassedAll()).isEqualTo(true)
     verifyZeroInteractions(mockDuration)
   }
 
@@ -61,6 +62,7 @@ class PercentileValidationTest {
     assertThat(result.validatedList[0].value).isEqualTo(9)
     assertThat(result.validatedList[0].threshold).isEqualTo(9)
     assertThat(result.validatedList[0].isPassed).isEqualTo(false)
+    assertThat(result.isPassedAll()).isEqualTo(false)
     verifyZeroInteractions(mockDuration)
   }
 }

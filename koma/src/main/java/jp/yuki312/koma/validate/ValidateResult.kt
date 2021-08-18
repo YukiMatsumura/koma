@@ -13,4 +13,8 @@ data class ValidateResult(
     val threshold: T?,
     val isPassed: Boolean
   )
+
+  fun isPassedAll() : Boolean {
+    return validatedList.all { it.isPassed }
+  }
 }
