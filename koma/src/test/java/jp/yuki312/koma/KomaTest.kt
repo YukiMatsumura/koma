@@ -17,7 +17,7 @@ class KomaTest {
 
   @After
   fun teardown() {
-    Koma.destroy(ApplicationProvider.getApplicationContext())
+    runCatching { Koma.destroy(ApplicationProvider.getApplicationContext()) }
   }
 
   @Test

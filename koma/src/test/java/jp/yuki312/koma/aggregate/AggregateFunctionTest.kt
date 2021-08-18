@@ -136,7 +136,7 @@ class AggregateFunctionTest {
     assertThat(result.draw!!.minDuration).isEqualTo(7)
     assertThat(result.sync!!.maxDuration).isEqualTo(12)
     assertThat(result.command!!.avgDuration).isEqualTo(13.0)
-    assertThat(result.swap!!.ratio).isEqualTo(3f / 5f)
+    assertThat(result.swap!!.ratio).isEqualTo(0.031707317f)
     assertThat(result.delay!!.sumDuration).isEqualTo(0)
     assertThat(result.anim).isNull()
   }

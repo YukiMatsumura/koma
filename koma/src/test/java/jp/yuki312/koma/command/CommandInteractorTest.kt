@@ -21,7 +21,6 @@ import org.mockito.kotlin.whenever
 @RunWith(AndroidJUnit4::class)
 class CommandInteractorTest {
 
-  private val logger: FrameMetricsLogger = mock()
   private val process: FrameMetricsProcess = mock()
   private val activity: Activity = mock()
 
