@@ -78,8 +78,8 @@ internal class CommandReceiver(
     get() = this?.get(INTENT_EXTRA_FRAME_METRICS_ID) as? String ?: ""
 
   companion object {
-    const val INTENT_ACTION_START = "jp.yuki312.framemetrics.START"
-    const val INTENT_ACTION_STOP = "jp.yuki312.framemetrics.STOP"
+    const val INTENT_ACTION_START = "jp.yuki312.koma.START"
+    const val INTENT_ACTION_STOP = "jp.yuki312.koma.STOP"
 
     const val INTENT_EXTRA_FRAME_METRICS_ID = "id"
     const val INTENT_EXTRA_FRAME_RATE = "framerate"
