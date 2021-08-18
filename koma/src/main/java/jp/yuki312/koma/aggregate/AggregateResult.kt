@@ -33,7 +33,9 @@ data class AggregateResult(
         if (durations.isNullOrEmpty() || total.isNullOrEmpty()) return null
 
         val ratio = if (total.isNotEmpty() && durations.isNotEmpty()) {
-          durations.count().toFloat() / total.count().toFloat()
+          total.sum().takeIf { it != 0 }?.let {
+            durations.sum().toFloat() / it.toFloat()
+          } ?: 0F
         } else {
           0F
         }

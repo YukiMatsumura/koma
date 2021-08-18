@@ -46,7 +46,7 @@ class AggregateResultTest {
 
     assertThat(result.durations).isEqualTo(listOf(0, 0, 0))
     assertThat(result.count).isEqualTo(3)
-    assertThat(result.ratio).isEqualTo(1.0F)
+    assertThat(result.ratio).isEqualTo(0.0F)
     assertThat(result.avgDuration).isEqualTo(0.0)
     assertThat(result.maxDuration).isEqualTo(0)
     assertThat(result.minDuration).isEqualTo(0)
@@ -69,7 +69,7 @@ class AggregateResultTest {
 
     assertThat(result.durations).isEqualTo(listOf(5))
     assertThat(result.count).isEqualTo(1)
-    assertThat(result.ratio).isEqualTo(0.2f)
+    assertThat(result.ratio).isEqualTo(5f / (1 + 2 + 3 + 4 + 5).toFloat())
     assertThat(result.avgDuration).isEqualTo(5.0)
     assertThat(result.maxDuration).isEqualTo(5)
     assertThat(result.minDuration).isEqualTo(5)
