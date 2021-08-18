@@ -4,10 +4,10 @@ import jp.yuki312.koma.FrameMetricsId
 
 data class ValidateResult(
   val id: FrameMetricsId,
-  val validatedList: List<MetricsValidation<*>>
+  val validatedList: List<ValidateItem<*>>
 ) {
 
-  data class MetricsValidation<T : Any>(
+  data class ValidateItem<T : Any>(
     val name: String,
     val value: T,
     val threshold: T?,

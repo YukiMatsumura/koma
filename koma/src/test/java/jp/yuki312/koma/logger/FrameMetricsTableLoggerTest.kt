@@ -94,7 +94,7 @@ class FrameMetricsTableLoggerTest {
       validateResult = ValidateResult(
         id = expectId,
         validatedList = listOf(
-          ValidateResult.MetricsValidation(
+          ValidateResult.ValidateItem(
             name = "test validation",
             value = 1.0,
             threshold = 1.0,
@@ -116,7 +116,7 @@ class FrameMetricsTableLoggerTest {
          Frame metrics │ count │ ratio   │ max  │ min  │ sum  │ avg    │ median │ mode       
         ───────────────┼───────┼─────────┼──────┼──────┼──────┼────────┼────────┼────────────
                  Total │   3 F │ 100.0 % │ 3 ms │ 1 ms │ 6 ms │ 2.0 ms │ 2.0 ms │ 1, 2, 3 ms 
-                  Anim │   1 F │  33.3 % │ 3 ms │ 3 ms │ 3 ms │ 3.0 ms │ 3.0 ms │       3 ms 
+                  Anim │   1 F │  50.0 % │ 3 ms │ 3 ms │ 3 ms │ 3.0 ms │ 3.0 ms │       3 ms 
         
          Validation name │ result │ value │ threshold 
         ─────────────────┼────────┼───────┼───────────

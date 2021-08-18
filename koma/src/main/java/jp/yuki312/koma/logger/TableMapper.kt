@@ -4,7 +4,7 @@ import jp.yuki312.koma.KomaConfig
 import jp.yuki312.koma.aggregate.AggregateResult
 import jp.yuki312.koma.aggregate.AggregateResult.AggregateDurations
 import jp.yuki312.koma.validate.ValidateResult
-import jp.yuki312.koma.validate.ValidateResult.MetricsValidation
+import jp.yuki312.koma.validate.ValidateResult.ValidateItem
 
 object TableMapper {
 
@@ -54,7 +54,7 @@ object TableMapper {
     )
   }
 
-  private fun MetricsValidation<*>.mapToRow(): ValidateTable.Row {
+  private fun ValidateItem<*>.mapToRow(): ValidateTable.Row {
     return ValidateTable.Row(
       label = name,
       passed = if (isPassed) "OK" else "NG",

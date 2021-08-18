@@ -159,7 +159,7 @@ class FrameMetricsProcessTest {
       val expectValidateResult = ValidateResult(
         id = FrameMetricsId.Custom("overwrite3"),
         validatedList = listOf(
-          ValidateResult.MetricsValidation<Int>(
+          ValidateResult.ValidateItem<Int>(
             name = "overwrite name",
             value = -1,
             threshold = 100,

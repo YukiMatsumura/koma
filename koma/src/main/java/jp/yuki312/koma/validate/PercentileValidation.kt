@@ -25,9 +25,9 @@ class PercentileValidation(
     durations: List<Int>?,
     rank: Double,
     threshold: Int,
-  ): ValidateResult.MetricsValidation<Int>? {
+  ): ValidateResult.ValidateItem<Int>? {
     val value = durations?.percentile(rank) ?: return null
-    return ValidateResult.MetricsValidation(
+    return ValidateResult.ValidateItem(
       name = "Frame duration ${"%.0f".format(rank)} percentile",
       value = value,
       threshold = threshold,
