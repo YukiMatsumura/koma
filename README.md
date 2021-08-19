@@ -82,14 +82,12 @@ You can determine that the performance does not meet your expectations.
 Koma.init(
   validateFunction = {
     val avg = it.total?.avgDuration ?: 0.0
-    ValidateResult(
-      validatedList = listOf(
-        ValidateResult.MetricsValidation<Double>(
-          isPassed = avg <= THRESHOLD,
-          ...
-        )
+    ValidateResult.create(
+      id = it.id,
+      ValidateItem(
+        isPassed = avg <= THRESHOLD,
+        ...
       )
-      ...
     )
   },
   frameMetricsListener = { id, config, aggregate, validate ->

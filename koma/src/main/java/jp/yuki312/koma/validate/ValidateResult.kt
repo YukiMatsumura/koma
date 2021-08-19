@@ -14,7 +14,13 @@ data class ValidateResult(
     val isPassed: Boolean
   )
 
-  fun isPassedAll() : Boolean {
+  fun isPassedAll(): Boolean {
     return validatedList.all { it.isPassed }
+  }
+
+  companion object {
+    fun create(id: FrameMetricsId, vararg validated: ValidateItem<*>): ValidateResult {
+      return ValidateResult(id = id, validatedList = validated.toList())
+    }
   }
 }
