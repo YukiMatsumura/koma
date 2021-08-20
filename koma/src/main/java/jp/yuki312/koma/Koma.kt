@@ -1,6 +1,7 @@
 package jp.yuki312.koma
 
 import android.app.Application
+import android.os.Build
 import android.util.Log
 import androidx.annotation.VisibleForTesting
 import jp.yuki312.koma.aggregate.AggregateFunction
@@ -64,7 +65,7 @@ object Koma {
     app: Application,
     enable: Boolean = true,
     enableCommandReceiver: Boolean = true,
-    enableUiComponentMetrics : Boolean = false,
+    enableUiComponentMetrics: Boolean = false,
     activityFrameMetricsFilter: ActivityFrameMetricsFilter = ActivityFrameMetricsFilter { true },
     fragmentFrameMetricsFilter: FragmentFrameMetricsFilter = FragmentFrameMetricsFilter { true },
     validateFunction: ValidateFunction = defaultValidateFunction(),
@@ -73,6 +74,11 @@ object Koma {
     defaultConfig: KomaConfig = defaultConfig()
   ) {
     if (!initialized.compareAndSet(false, true)) return // already initialized
+
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+      //  FrameMetrics API added in API 24
+      return
+    }
 
     this.enable = enable
     this.application = app
