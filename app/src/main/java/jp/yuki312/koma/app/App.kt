@@ -6,6 +6,6 @@ import jp.yuki312.koma.Koma
 class App : Application() {
   override fun onCreate() {
     super.onCreate()
-    Koma.init(app = this)
+    Koma.init(app = this, enableUiComponentMetrics = true)
   }
 }
