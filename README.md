@@ -8,7 +8,7 @@
 <div align="center">
 
 ```
-implementation 'io.github.yukimatsumura:koma:0.1'
+implementation 'io.github.yukimatsumura:koma:0.2'
 ```
 
 </div>

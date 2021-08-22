@@ -6,7 +6,7 @@ plugins {
 ext {
   // Provide your own coordinates here
   PUBLISH_GROUP_ID = 'io.github.yukimatsumura'
-  PUBLISH_VERSION = '0.1'
+  PUBLISH_VERSION = '0.2'
   PUBLISH_ARTIFACT_ID = 'koma'
 }
 
