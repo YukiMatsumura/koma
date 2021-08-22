@@ -3,14 +3,18 @@ plugins {
   id 'kotlin-android'
 }
 
+ext {
+  // Provide your own coordinates here
+  PUBLISH_GROUP_ID = 'io.github.yukimatsumura'
+  PUBLISH_VERSION = '0.1'
+  PUBLISH_ARTIFACT_ID = 'koma'
+}
+
 android {
   compileSdk 30
 
   defaultConfig {
     minSdk 21
-    targetSdk 30
-    versionCode 1
-    versionName "1.0"
 
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     consumerProguardFiles "consumer-rules.pro"
@@ -44,3 +48,5 @@ dependencies {
   }
   testImplementation "org.assertj:assertj-core:1.7.1"
 }
+
+apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
