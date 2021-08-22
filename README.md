@@ -8,7 +8,7 @@
 "koma" is an Android library that visualizes the UI rendering performance of your app.
 It can also output a special log if the UI rendering performance is worse than you expect.
 
-UI rendering performance is measured using the [FrameMetrics](https://developer.android.com/reference/android/view/FrameMetrics) class.
+UI rendering performance is measured using the [FrameMetrics](https://developer.android.com/reference/androidx/core/app/FrameMetricsAggregator) class.
 Therefore, this library will be automatically disabled in Android SDKs below 24.
 
 ## Measuring UI rendering performance
