@@ -10,6 +10,7 @@ import android.os.Bundle
 
 internal class CommandReceiver(
   private val interactor: CommandInteractor,
+  actionScheme: String,
 ) : BroadcastReceiver() {
 
   private val resumedActivityObserver = object : Application.ActivityLifecycleCallbacks {
@@ -28,6 +29,9 @@ internal class CommandReceiver(
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit
     override fun onActivityDestroyed(activity: Activity) = Unit
   }
+
+  private val intentActionStart = "$actionScheme.$INTENT_ACTION_START_SUFFIX"
+  private val intentActionStop = "$actionScheme.$INTENT_ACTION_STOP_SUFFIX"
 
   override fun onReceive(context: Context?, intent: Intent?) {
     if (intent == null) return
@@ -49,8 +53,8 @@ internal class CommandReceiver(
   fun register(app: Application) {
     app.registerActivityLifecycleCallbacks(resumedActivityObserver)
     val intentFilter = IntentFilter().apply {
-      addAction(INTENT_ACTION_START)
-      addAction(INTENT_ACTION_STOP)
+      addAction(intentActionStart)
+      addAction(intentActionStop)
     }
     app.registerReceiver(this, intentFilter)
   }
@@ -61,11 +65,11 @@ internal class CommandReceiver(
   }
 
   private fun Intent.isStartAction(): Boolean {
-    return action == INTENT_ACTION_START
+    return action == intentActionStart
   }
 
   private fun Intent.isStopAction(): Boolean {
-    return action == INTENT_ACTION_STOP
+    return action == intentActionStop
   }
 
   private val Bundle?.frameRate: Int
@@ -78,8 +82,8 @@ internal class CommandReceiver(
     get() = this?.get(INTENT_EXTRA_FRAME_METRICS_ID) as? String ?: ""
 
   companion object {
-    const val INTENT_ACTION_START = "jp.yuki312.koma.START"
-    const val INTENT_ACTION_STOP = "jp.yuki312.koma.STOP"
+    const val INTENT_ACTION_START_SUFFIX = "START"
+    const val INTENT_ACTION_STOP_SUFFIX = "STOP"
 
     const val INTENT_EXTRA_FRAME_METRICS_ID = "id"
     const val INTENT_EXTRA_FRAME_RATE = "framerate"

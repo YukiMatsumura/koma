@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 object Koma {
 
-  const val LOGTAG = "Koma"
+  const val LOGTAG = "koma"
 
   private lateinit var application: Application
   private lateinit var interceptor: KomaInterceptor
@@ -48,7 +48,10 @@ object Koma {
   }
 
   private val commandReceiver: CommandReceiver by lazy {
-    CommandReceiver(CommandInteractor(processFactory))
+    CommandReceiver(
+      interactor = CommandInteractor(processFactory),
+      actionScheme = application.packageName
+    )
   }
 
   private val uiComponentFrameMetrics: UiComponentFrameMetrics by lazy {

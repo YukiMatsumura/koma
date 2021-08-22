@@ -62,7 +62,7 @@ process.start(id = id, activity = activity)
 process.stop(id)
 ```
 
-If you send Broadcast Intent with the ADB command, you can measure it without adding any code.
+If you send Broadcast Intent with ADB command while the app is in front, you can measure it without adding any code.
 
 ```kotlin
 Koma.init(
@@ -70,8 +70,10 @@ Koma.init(
   ...
 )
 
-// adb shell am broadcast -a jp.yuki312.koma.START
-// adb shell am broadcast -a jp.yuki312.koma.STOP
+// adb shell am broadcast -a <YOUR_APP_PACKAGE_NAME>.START
+// adb shell am broadcast -a <YOUR_APP_PACKAGE_NAME>.STOP
+
+// e.g. adb shell am broadcast -a jp.yuki312.koma.app.START
 ```
 
 You can also automatically measure the performance of all Activities and Fragments.
