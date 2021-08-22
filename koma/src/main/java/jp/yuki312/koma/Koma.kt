@@ -75,9 +75,10 @@ object Koma {
   ) {
     if (!initialized.compareAndSet(false, true)) return // already initialized
 
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-      //  FrameMetrics API added in API 24
-      return
+    val enable = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+      false
+    } else {
+      enable
     }
 
     this.enable = enable
