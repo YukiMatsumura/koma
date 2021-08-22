@@ -27,6 +27,13 @@ artifacts {
   archives javadocJar
 }
 
+signing {
+  useInMemoryPgpKeys(rootProject.ext["signing.keyId"],
+      rootProject.ext["signing.key"],
+      rootProject.ext["signing.password"],)
+  sign publishing.publications
+}
+
 group = PUBLISH_GROUP_ID
 version = PUBLISH_VERSION
 
@@ -82,11 +89,4 @@ afterEvaluate {
       }
     }
   }
-}
-
-signing {
-  useInMemoryPgpKeys(rootProject.ext["signing.keyId"],
-      rootProject.ext["signing.password"],
-      rootProject.ext["signing.secretKeyRingFile"],)
-  sign publishing.publications
 }
