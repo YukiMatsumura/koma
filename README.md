@@ -5,6 +5,14 @@
     koma
 </h1>
 
+<div align="center">
+
+```
+implementation 'io.github.yukimatsumura:koma:0.1'
+```
+
+</div>
+
 "koma" is an Android library that visualizes the UI rendering performance of your app.
 It can also output a special log if the UI rendering performance is worse than you expect.
 
