@@ -3,9 +3,8 @@ dependencyResolutionManagement {
   repositories {
     google()
     mavenCentral()
-    jcenter() // Warning: this repository is going to shut down soon
   }
 }
-rootProject.name = "Frame Metrics"
+rootProject.name = "koma"
 include ':app'
 include ':koma'
