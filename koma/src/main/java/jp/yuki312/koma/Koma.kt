@@ -16,22 +16,28 @@ import jp.yuki312.koma.uicomponent.UiComponentInteractor
 import jp.yuki312.koma.validate.PercentileValidation
 import jp.yuki312.koma.validate.ValidateFunction
 import jp.yuki312.koma.validate.ValidateResult
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import java.util.concurrent.atomic.AtomicBoolean
 
 object Koma {
 
   const val LOGTAG = "koma"
 
+  private val initialized: AtomicBoolean = AtomicBoolean(false)
+  private var enable: Boolean = false
+
   private lateinit var application: Application
   private lateinit var interceptor: KomaInterceptor
   private lateinit var validateFunction: ValidateFunction
   private lateinit var defaultConfig: KomaConfig
-  private lateinit var defaultListener: FrameMetricsListener
+  private lateinit var listener: FrameMetricsListener
   private lateinit var activityFrameMetricsFilter: ActivityFrameMetricsFilter
   private lateinit var fragmentFrameMetricsFilter: FragmentFrameMetricsFilter
 
-  private var enable: Boolean = false
-  private val initialized: AtomicBoolean = AtomicBoolean(false)
+  internal lateinit var processScope: CoroutineScope
 
   private val processFactory: ProcessFactory by lazy {
     ProcessFactory {
@@ -42,7 +48,8 @@ object Koma {
         validator = validateFunction,
         interceptor = interceptor,
         defaultConfig = defaultConfig,
-        defaultListener = defaultListener,
+        scope = processScope,
+        listener = listener,
       )
     }
   }
@@ -75,6 +82,35 @@ object Koma {
     interceptor: KomaInterceptor? = null,
     frameMetricsListener: FrameMetricsListener = defaultListener(),
     defaultConfig: KomaConfig = defaultConfig()
+  ) = init(
+    app = app,
+    enable = enable,
+    enableCommandReceiver = enableCommandReceiver,
+    enableUiComponentMetrics = enableUiComponentMetrics,
+    activityFrameMetricsFilter = activityFrameMetricsFilter,
+    fragmentFrameMetricsFilter = fragmentFrameMetricsFilter,
+    validateFunction = validateFunction,
+    interceptor = interceptor,
+    frameMetricsListener = frameMetricsListener,
+    defaultConfig = defaultConfig,
+    processScope = CoroutineScope(
+      SupervisorJob() + CoroutineName("Koma") + Dispatchers.Default
+    )
+  )
+
+  @VisibleForTesting
+  fun init(
+    app: Application,
+    enable: Boolean = true,
+    enableCommandReceiver: Boolean = true,
+    enableUiComponentMetrics: Boolean = false,
+    activityFrameMetricsFilter: ActivityFrameMetricsFilter = ActivityFrameMetricsFilter { true },
+    fragmentFrameMetricsFilter: FragmentFrameMetricsFilter = FragmentFrameMetricsFilter { true },
+    validateFunction: ValidateFunction = defaultValidateFunction(),
+    interceptor: KomaInterceptor? = null,
+    frameMetricsListener: FrameMetricsListener = defaultListener(),
+    defaultConfig: KomaConfig = defaultConfig(),
+    processScope: CoroutineScope,
   ) {
     if (!initialized.compareAndSet(false, true)) return // already initialized
 
@@ -87,7 +123,7 @@ object Koma {
     this.enable = enable
     this.application = app
     this.defaultConfig = defaultConfig
-    this.defaultListener = frameMetricsListener
+    this.listener = frameMetricsListener
     this.interceptor = interceptor ?: object : KomaInterceptor {
       override fun onTracked(result: TrackResult) = result
       override fun onAggregated(result: AggregateResult) = result
@@ -96,6 +132,7 @@ object Koma {
     this.validateFunction = validateFunction
     this.activityFrameMetricsFilter = activityFrameMetricsFilter
     this.fragmentFrameMetricsFilter = fragmentFrameMetricsFilter
+    this.processScope = processScope
     if (enable && enableCommandReceiver) commandReceiver.register(app)
     if (enable && enableUiComponentMetrics) uiComponentFrameMetrics.register(app)
   }

@@ -1,11 +1,10 @@
 package jp.yuki312.koma.command
 
-import android.app.Activity
+import androidx.core.app.ComponentActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import jp.yuki312.koma.KomaConfig
 import jp.yuki312.koma.FrameMetricsId
 import jp.yuki312.koma.FrameMetricsProcess
-import jp.yuki312.koma.logger.FrameMetricsLogger
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,7 +21,7 @@ import org.mockito.kotlin.whenever
 class CommandInteractorTest {
 
   private val process: FrameMetricsProcess = mock()
-  private val activity: Activity = mock()
+  private val activity: ComponentActivity = mock()
 
   private lateinit var config: KomaConfig
 
@@ -54,7 +53,6 @@ class CommandInteractorTest {
         frameRate = 60,
         analyzeMode = false
       )),
-      anyOrNull(),
     )
   }
 
@@ -94,7 +92,6 @@ class CommandInteractorTest {
         frameRate = 60,
         analyzeMode = false
       )),
-      anyOrNull(),
     )
     verify(process, times(1)).stopAll()
   }

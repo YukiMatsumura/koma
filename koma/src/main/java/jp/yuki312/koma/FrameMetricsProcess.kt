@@ -1,9 +1,11 @@
 package jp.yuki312.koma
 
-import android.app.Activity
+import androidx.core.app.ComponentActivity
 import jp.yuki312.koma.aggregate.AggregateFunction
 import jp.yuki312.koma.track.Tracker
 import jp.yuki312.koma.validate.ValidateFunction
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class FrameMetricsProcess internal constructor(
   private val enable: Boolean,
@@ -12,48 +14,51 @@ class FrameMetricsProcess internal constructor(
   private val validator: ValidateFunction,
   private val interceptor: KomaInterceptor?,
   val defaultConfig: KomaConfig,
-  private val defaultListener: FrameMetricsListener,
+  private val scope: CoroutineScope,
+  private val listener: FrameMetricsListener,
 ) {
 
   fun start(
     id: FrameMetricsId,
-    activity: Activity,
+    activity: ComponentActivity,
     config: KomaConfig = defaultConfig,
-    listener: FrameMetricsListener = defaultListener,
   ) {
     if (!enable) return
-
     tracker.startTracking(
       id = id,
       activity = activity,
       config = config,
     ) { tracked ->
-      val trackResult = interceptor?.onTracked(tracked) ?: tracked
+      scope.launch {
+        val trackResult = interceptor?.onTracked(tracked) ?: tracked
 
-      val aggregateResult = aggregator.execute(trackResult)
-      val aggregate = interceptor?.onAggregated(aggregateResult) ?: aggregateResult
+        val aggregateResult = aggregator.execute(trackResult)
+        val aggregate = interceptor?.onAggregated(aggregateResult) ?: aggregateResult
 
-      val validateResult = validator.execute(aggregateResult)
-      val validate = interceptor?.onValidated(validateResult) ?: validateResult
+        val validateResult = validator.execute(aggregateResult)
+        val validate = interceptor?.onValidated(validateResult) ?: validateResult
 
-      listener.onFrameMetricsResult(
-        id = id,
-        config = config,
-        aggregateResult = aggregate,
-        validateResult = validate,
-      )
+        listener.onFrameMetricsResult(
+          id = id,
+          config = config,
+          aggregateResult = aggregate,
+          validateResult = validate,
+        )
+      }
     }
   }
 
   fun stop(id: FrameMetricsId) {
     if (!enable) return
-
-    tracker.stopTracking(id)
+    scope.launch {
+      tracker.stopTracking(id)
+    }
   }
 
   fun stopAll() {
     if (!enable) return
-
-    tracker.stopAll()
+    scope.launch {
+      tracker.stopAll()
+    }
   }
 }

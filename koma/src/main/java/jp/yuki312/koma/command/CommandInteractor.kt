@@ -1,8 +1,9 @@
 package jp.yuki312.koma.command
 
-import android.app.Activity
 import android.util.Log
+import androidx.core.app.ComponentActivity
 import jp.yuki312.koma.FrameMetricsProcess
+import jp.yuki312.koma.Koma
 import jp.yuki312.koma.ProcessFactory
 import jp.yuki312.koma.toCustomId
 import java.lang.ref.WeakReference
@@ -11,10 +12,10 @@ internal class CommandInteractor(
   processFactory: ProcessFactory,
 ) {
 
-  private var resumedActivity = WeakReference<Activity>(null)
+  private var resumedActivity = WeakReference<ComponentActivity>(null)
   private val process: FrameMetricsProcess = processFactory.create()
 
-  fun resumedActivity(activity: Activity) {
+  fun resumedActivity(activity: ComponentActivity) {
     resumedActivity = WeakReference(activity)
   }
 
@@ -30,10 +31,7 @@ internal class CommandInteractor(
   ) {
     val activity = resumedActivity.get()
     if (activity == null) {
-      Log.w(
-        "FrameMetrics",
-        "Your Activity is not resuming. Please use the command while your Activity is resumed."
-      )
+      Log.w(Koma.LOGTAG, "Activity is not resumed. Use the command while Activity is resumed.")
       return
     }
 

@@ -1,10 +1,12 @@
 package jp.yuki312.koma
 
-import android.app.Activity
 import android.os.Build
 import android.view.Window
+import androidx.core.app.ComponentActivity
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -17,6 +19,7 @@ import org.mockito.kotlin.verifyZeroInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.annotation.Config
 
+@ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class KomaTest {
 
@@ -27,25 +30,26 @@ class KomaTest {
 
   @Config(sdk = [Build.VERSION_CODES.N])
   @Test
-  fun newProcess_enable() {
+  fun newProcess_enable() = runBlockingTest {
     val id = FrameMetricsId.Custom("targetId")
-    val listener : FrameMetricsListener = mock()
-    val activity: Activity = mock()
-    val window : Window = mock()
+    val listener: FrameMetricsListener = mock()
+    val activity: ComponentActivity = mock()
+    val window: Window = mock()
     doReturn(window).whenever(activity).window
 
     Koma.init(
       app = ApplicationProvider.getApplicationContext(),
       enable = true,
       frameMetricsListener = listener,
+      processScope = this,
     )
-    val disableProcess = Koma.newProcess()
+    val enableProcess = Koma.newProcess()
 
-    disableProcess.start(
+    enableProcess.start(
       id = id,
       activity = activity,
     )
-    disableProcess.stopAll()
+    enableProcess.stopAll()
 
     verify(listener).onFrameMetricsResult(
       id = eq(id),
@@ -57,15 +61,16 @@ class KomaTest {
 
   @Config(sdk = [Build.VERSION_CODES.M])
   @Test
-  fun newProcess_enable_preN() {
+  fun newProcess_enable_preN() = runBlockingTest {
     val id = FrameMetricsId.Custom("targetId")
-    val listener : FrameMetricsListener = mock()
-    val activity: Activity = mock()
+    val listener: FrameMetricsListener = mock()
+    val activity: ComponentActivity = mock()
 
     Koma.init(
       app = ApplicationProvider.getApplicationContext(),
       enable = true,
       frameMetricsListener = listener,
+      processScope = this
     )
     val disableProcess = Koma.newProcess()
 
@@ -79,9 +84,9 @@ class KomaTest {
   }
 
   @Test
-  fun newProcess_disable() {
-    val listener : FrameMetricsListener = mock()
-    val activity: Activity = mock()
+  fun newProcess_disable() = runBlockingTest {
+    val listener: FrameMetricsListener = mock()
+    val activity: ComponentActivity = mock()
     Koma.init(
       app = ApplicationProvider.getApplicationContext(),
       enable = false,
