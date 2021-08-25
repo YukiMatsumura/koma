@@ -1,10 +1,12 @@
 package jp.yuki312.koma.aggregate
 
+import androidx.annotation.WorkerThread
 import jp.yuki312.koma.aggregate.AggregateResult.AggregateDurations
 import jp.yuki312.koma.track.TrackResult
 
 internal class AggregateFunction {
 
+  @WorkerThread
   fun execute(trackResult: TrackResult): AggregateResult {
     val config = trackResult.config
     val durations = trackResult.durations

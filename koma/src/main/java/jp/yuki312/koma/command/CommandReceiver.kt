@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import androidx.core.app.ComponentActivity
 
 internal class CommandReceiver(
   private val interactor: CommandInteractor,
@@ -18,10 +19,12 @@ internal class CommandReceiver(
     override fun onActivityStarted(activity: Activity) = Unit
 
     override fun onActivityResumed(activity: Activity) {
+      if (activity !is ComponentActivity) return
       interactor.resumedActivity(activity)
     }
 
     override fun onActivityPaused(activity: Activity) {
+      if (activity !is ComponentActivity) return
       interactor.pausedActivity()
     }
 

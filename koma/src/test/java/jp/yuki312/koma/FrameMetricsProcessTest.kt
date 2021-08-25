@@ -1,7 +1,7 @@
 package jp.yuki312.koma
 
-import android.app.Activity
 import android.util.SparseIntArray
+import androidx.core.app.ComponentActivity
 import androidx.core.app.FrameMetricsAggregator
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import jp.yuki312.koma.aggregate.AggregateFunction
@@ -12,6 +12,8 @@ import jp.yuki312.koma.track.TrackResult.TrackDurations
 import jp.yuki312.koma.track.Tracker
 import jp.yuki312.koma.validate.PercentileValidation
 import jp.yuki312.koma.validate.ValidateResult
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
@@ -25,6 +27,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verifyZeroInteractions
 import org.mockito.kotlin.whenever
 
+@ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class FrameMetricsProcessTest {
 
@@ -36,14 +39,14 @@ class FrameMetricsProcessTest {
   lateinit var frameMetricsAggregator: FrameMetricsAggregator
 
   @Mock
-  lateinit var activity: Activity
+  lateinit var activity: ComponentActivity
 
   @Before fun setUp() {
     tracker = Tracker { frameMetricsAggregator }
   }
 
   @Test
-  fun start_stop() {
+  fun start_stop() = runBlockingTest {
     val expectConfig = KomaConfig(
       frameRate = 60,
       analyzeMode = false,
@@ -54,6 +57,7 @@ class FrameMetricsProcessTest {
       lateinit var trackResult: TrackResult
       lateinit var aggregateResult: AggregateResult
       lateinit var validateResult: ValidateResult
+
       override fun onTracked(result: TrackResult): TrackResult {
         trackResult = result
         return result
@@ -111,7 +115,8 @@ class FrameMetricsProcessTest {
       validator = PercentileValidation(90.0, 32),
       interceptor = interceptor,
       defaultConfig = expectConfig,
-      defaultListener = listener
+      scope = this,
+      listener = listener,
     )
 
     doReturn(metrics).whenever(frameMetricsAggregator).metrics
@@ -133,7 +138,7 @@ class FrameMetricsProcessTest {
   }
 
   @Test
-  fun start_stop_intercept() {
+  fun start_stop_intercept() = runBlockingTest {
     val expectConfig = KomaConfig(
       frameRate = 60,
       analyzeMode = false,
@@ -210,7 +215,8 @@ class FrameMetricsProcessTest {
       validator = PercentileValidation(90.0, 32),
       interceptor = interceptor,
       defaultConfig = expectConfig,
-      defaultListener = listener
+      scope = this,
+      listener = listener,
     )
 
     doReturn(metrics).whenever(frameMetricsAggregator).metrics
@@ -229,7 +235,7 @@ class FrameMetricsProcessTest {
   }
 
   @Test
-  fun disable() {
+  fun disable() = runBlockingTest {
     val id = FrameMetricsId.Custom("noop")
     val config = KomaConfig(
       frameRate = 60,
@@ -242,7 +248,7 @@ class FrameMetricsProcessTest {
       override fun onValidated(result: ValidateResult): ValidateResult = result
     }
     val listener = FrameMetricsListener { _, _, _, _ -> }
-    val tracker : Tracker = mock()
+    val tracker: Tracker = mock()
 
     val target = FrameMetricsProcess(
       enable = false,
@@ -251,7 +257,8 @@ class FrameMetricsProcessTest {
       validator = PercentileValidation(0.0, 0),
       interceptor = interceptor,
       defaultConfig = config,
-      defaultListener = listener,
+      scope = this,
+      listener = listener,
     )
 
     target.start(

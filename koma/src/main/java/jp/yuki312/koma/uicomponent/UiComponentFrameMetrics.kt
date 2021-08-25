@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.app.Application.ActivityLifecycleCallbacks
 import android.os.Bundle
+import androidx.core.app.ComponentActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -24,10 +25,12 @@ internal class UiComponentFrameMetrics(
     }
 
     override fun onActivityResumed(activity: Activity) {
+      if (activity !is ComponentActivity) return
       interactor.onActivityResumed(activity)
     }
 
     override fun onActivityPaused(activity: Activity) {
+      if (activity !is ComponentActivity) return
       interactor.onActivityPaused(activity)
     }
 

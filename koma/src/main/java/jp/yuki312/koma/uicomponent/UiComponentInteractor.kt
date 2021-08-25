@@ -1,6 +1,6 @@
 package jp.yuki312.koma.uicomponent
 
-import android.app.Activity
+import androidx.core.app.ComponentActivity
 import androidx.fragment.app.Fragment
 import jp.yuki312.koma.ActivityFrameMetricsFilter
 import jp.yuki312.koma.FragmentFrameMetricsFilter
@@ -16,7 +16,7 @@ internal class UiComponentInteractor(
 
   private val process: FrameMetricsProcess = processFactory.create()
 
-  fun onActivityResumed(activity: Activity) {
+  fun onActivityResumed(activity: ComponentActivity) {
     if (!activityFilter.filter(activity)) return
 
     process.start(
@@ -25,7 +25,7 @@ internal class UiComponentInteractor(
     )
   }
 
-  fun onActivityPaused(activity: Activity) {
+  fun onActivityPaused(activity: ComponentActivity) {
     process.stop(
       id = activity.toFrameMetricsId()
     )
